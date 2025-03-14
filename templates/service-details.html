@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Dravsech SACCO - Service Details</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .header {
+      background-color: #004085;
+      padding: 15px;
+      text-align: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      position: relative;
+    }
+    .sitename {
+      color: white;
+    }
+    .main {
+      padding: 20px;
+    }
+    .service {
+      background: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+    h2, h3 {
+      color: #004085;
+    }
+    .footer {
+      background-color: #004085;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    /* Home Button Styling */
+    .home-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: 0.3s;
+      text-align: center;
+    }
+    .home-button:hover {
+      background: #218838;
+    }
+
+    /* Top Home Button (Positioned in Header) */
+    .top-home {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+    }
+
+    /* Bottom Home Button (Centered at End) */
+    .bottom-home {
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="top-home">
+      <a href="{% url 'home' %}" class="home-button">Return to Home</a>
+    </div>
+    Dravsech SACCO
+  </header>
+
+  <main class="main">
+    <section id="services">
+      <h2><strong>Our Services</strong></h2>
+      <p>Empowering You with Smart Financial Solutions!</p>
+
+      <div class="service">
+        <h3><strong>Savings Accounts</strong></h3>
+        <p>Secure Your Future with High-Yield Savings</p>
+        <p>Our savings accounts offer competitive interest rates, helping you grow your money while keeping it safe.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Loan Products</strong></h3>
+        <p>Affordable & Flexible Loans for Every Need</p>
+        <p>We provide personal, business, emergency, and school fees loans with low-interest rates and flexible repayment plans.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Investment Opportunities</strong></h3>
+        <p>Smart Investments for a Brighter Tomorrow</p>
+        <p>Grow your wealth with secure and high-return investment plans in shares, real estate, and cooperative projects.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Mobile & Online Banking</strong></h3>
+        <p>24/7 Access to Your Funds</p>
+        <p>Manage your savings, apply for loans, and perform transactions conveniently from anywhere.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Insurance Services</strong></h3>
+        <p>Protect Your Future with Comprehensive Coverage</p>
+        <p>We offer various insurance products, including loan protection, life insurance, and medical cover.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Financial Advisory & Training</strong></h3>
+        <p>Empowering You with Financial Knowledge</p>
+        <p>Our financial literacy programs help you make informed financial decisions and manage credit wisely.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Salary Advances</strong></h3>
+        <p>Quick Cash When You Need It</p>
+        <p>We offer short-term salary advances to help you meet urgent financial needs.</p>
+      </div>
+
+      <div class="service">
+        <h3><strong>Group Loans</strong></h3>
+        <p>Strengthening Financial Groups</p>
+        <p>We provide group loans to investment groups and chamas, enabling financial empowerment.</p>
+      </div>
+    </section>
+
+    <!-- Home Button at the Bottom -->
+    <div class="bottom-home">
+      <a href="{% url 'home' %}" class="home-button">Return to Hom

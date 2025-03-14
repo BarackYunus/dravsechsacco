@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'adminpanel' %}" style="
+    display: inline-block;
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+">
+    &larr; Return to Dashboard
+</a>
+
+    <div class="container">
+        <h2>Loan Search</h2>
+        
+        <form method="GET" action="">
+            <div class="search-box">
+                <input type="text" name="query" placeholder="Enter search value..." value="{{ query }}">
+                <select name="filter">
+                    <option value="loan_number" {% if filter_type == 'loan_number' %}selected{% endif %}>Loan Number</option>
+                    <option value="status" {% if filter_type == 'status' %}selected{% endif %}>Loan Status</option>
+                    <option value="amount" {% if filter_type == 'amount' %}selected{% endif %}>Loan Amount (min-max)</option>
+                    <option value="repayment_date" {% if filter_type == 'repayment_date' %}selected{% endif %}>Repayment Date</option>
+                    <option value="overdue" {% if filter_type == 'overdue' %}selected{% endif %}>Overdue Loans</option>
+                </select>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        {% if loans %}
+            <table>
+                <tr>
+                    <th>Loan Number</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Repayment Date</th>
+                    <th>Due Date</th>
+                </tr>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.loan_id }}</td>
+                    <td>{{ loan.status }}</td>
+                    <td>{{ loan.amount }}</td>
+                    <td>{{ loan.start_date }}</td>
+                    <td>{{ loan.due_date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No loans found matching your criteria.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authentication</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .auth-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h2 {
+            color: #004085;
+        }
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-login {
+            background: #007bff;
+            color: white;
+        }
+        .btn-login:hover {
+            background: #0056b3;
+        }
+        .btn-register {
+            background: #28a745;
+            color: white;
+        }
+        .btn-register:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-panel">
+        <h2>Welcome to Dravsech SACCO</h2>
+        <p>Please choose an option:</p>
+        <div class="auth-buttons">
+            <a href="{% url 'login' %}"> <button>LOGIN</button></a>
+            <a href="{% url 'register' %}"><button>REGISTER</button></a>
+        </div>
+    </div>
+
+</body>
+</html>

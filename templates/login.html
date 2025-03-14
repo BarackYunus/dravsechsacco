@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Account Login</title>
+    <link rel="stylesheet" href="{% static 'assets/css/login.css' %}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-panel">
+            <h2>Account Login</h2>
+            <form method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    {% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %}
+
+                    <label for="account_number">Account Number</label>
+                    <input type="text" id="account_number" name="account_number" placeholder="Enter your account number" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="password-field">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <span class="toggle-password" onclick="togglePassword()">
+                            <p>show</p>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-login">Login</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var toggleIcon = document.getElementById("toggleIcon");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleIcon.src = "{% static 'images/eye-off-icon.svg' %}";
+        } else {
+            passwordInput.type = "password";
+            toggleIcon.src = "{% static 'images/eye-icon.svg' %}";
+        }
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Reports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        header {
+            background: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        canvas {
+            max-width: 80%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Loan Reports</h1>
+    </header>
+
+    <a href="{% url 'adminpanel' %}" class="btn">Return to Panel</a>
+
+    <main>
+        <section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Loan ID</th>
+                        <th>Borrower</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                    <tr>
+                        <td>{{ loan.loan_id }}</td>
+                        <td>{{ loan.member }}</td>
+                        <td>{{ loan.amount }}</td>
+                        <td>{{ loan.due_date }}</td>
+                        <td>{{ loan.loan_type }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href=""><button class="btn">Download PDF</button></a>
+        </section>
+
+        <!-- Loan Amount Chart -->
+        <section>
+            <canvas id="loanChart"></canvas>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById("loanChart").getContext("2d");
+            const loanData = {
+                labels: [{% for loan in loans %}"{{ loan.member }}", {% endfor %}],
+                datasets: [{
+                    label: "Loan Amounts",
+                    data: [{% for loan in loans %}{{ loan.amount }}, {% endfor %}],
+                    backgroundColor: "rgba(54, 162, 235, 0.6)"
+                }]
+            };
+
+            new Chart(ctx, {
+                type: "bar",
+                data: loanData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: "Loan Amounts by Borrower" }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

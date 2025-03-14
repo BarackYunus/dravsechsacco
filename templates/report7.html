@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Reports</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .chart-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'adminpanel' %}">Return to Admin Panel</a>
+    <div class="container">
+        <h2>Deposit Transactions Report</h2>
+        <table>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Member</th>
+                <th>Amount (Ksh)</th>
+                <th>Date</th>
+            </tr>
+            {% for deposit in deposits %}
+            <tr>
+                <td>{{ deposit.transaction_id }}</td>
+                <td>{{ deposit.member }}</td>
+                <td>{{ deposit.amount }}</td>
+                <td>{{ deposit.date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align:center; font-weight:bold; color:#888;">None</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Withdrawals Report</h2>
+        <table>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Member</th>
+                <th>Amount (Ksh)</th>
+                <th>Date</th>
+            </tr>
+            {% for withdrawal in withdrawals %}
+            <tr>
+                <td>{{ withdrawal.transaction_id }}</td>
+                <td>{{ withdrawal.member }}</td>
+                <td>{{ withdrawal.amount }}</td>
+                <td>{{ withdrawal.date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align:center; font-weight:bold; color:#888;">None</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Transaction Summary Report</h2>
+        <div class="summary">
+            <p><strong>Total Deposits:</strong> Ksh {{ total_deposits }}</p>
+            <p><strong>Total Withdrawals:</strong> Ksh {{ total_withdrawals }}</p>
+            <p><strong>Net Balance:</strong> Ksh {{ net_balance }}</p>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="transactionChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('transactionChart').getContext('2d');
+        var transactionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Total Deposits', 'Total Withdrawals', 'Net Balance'],
+                datasets: [{
+                    label: 'Amount in Ksh',
+                    data: [{{ total_deposits }}, {{ total_withdrawals }}, {{ net_balance }}],
+                    backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+                    borderColor: ['#218838', '#c82333', '#e0a800'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

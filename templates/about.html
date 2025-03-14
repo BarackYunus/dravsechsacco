@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>About Dravsech SACCO</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1, h2 {
+            color: #004085;
+        }
+        .about-header {
+            background: #007bff;
+            color: white;
+            padding: 50px 0;
+            position: relative;
+        }
+        .home-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .home-button:hover {
+            background: #218838;
+        }
+        .top-home {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ffc107;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .top-home:hover {
+            background: #e0a800;
+        }
+        .about-section {
+            background: white;
+            padding: 40px 0;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .about-services ul {
+            list-style: none;
+            padding: 0;
+        }
+        .about-services ul li {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="about-header">
+        <!-- Home Button at the Top-Left -->
+        <a href="{% url 'home' %}" class="top-home">⬅ Home</a>
+        <div class="container">
+            <h1>About Dravsech SACCO</h1>
+            <p>Empowering Financial Growth Through Trust & Innovation</p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <h2>Our Story</h2>
+            <p>Dravsech SACCO was founded on the principles of mutual assistance and financial empowerment. Our journey began with a vision to provide accessible, affordable, and transparent financial services to our community.</p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <h2>Our Mission</h2>
+            <p>Our mission is to empower our members with innovative financial solutions that support savings, provide affordable loans, and foster growth through strategic investments.</p>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <h2>Our Vision</h2>
+            <p>We envision a future where every member of our community thrives financially through cooperative efforts, sustainable growth, and a shared commitment to success.</p>
+        </div>
+    </section>
+
+    <section class="about-services about-section">
+        <div class="container">
+            <h2>Services We Offer</h2>
+            <ul>
+                <li>Savings Accounts & Fixed Deposits</li>
+                <li>Loan Products (Emergency, Development, Business Loans, etc.)</li>
+                <li>Investment & Wealth Growth Opportunities</li>
+                <li>Financial Education & Advisory</li>
+                <li>Mobile & Online Banking Services</li>
+                <li>Insurance & Welfare Services</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="container">
+            <h2>Our Team</h2>
+            <p>Our team of dedicated professionals is committed to delivering personalized service and expert financial guidance, ensuring your financial journey is a successful one.</p>
+        </div>
+    </section>
+
+    <!-- Home Button at the Bottom -->
+    <div class="container">
+        <a href="{% url 'home' %}" class="home-button">⬅ Return to Home</a>
+    </div>
+
+</body>
+
+</html>

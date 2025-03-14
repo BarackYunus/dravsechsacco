@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Query</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            width: 60%;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .dashboard-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .dashboard-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Transaction Query</h2>
+
+        <form method="GET">
+            <div class="search-box">
+                <input type="text" name="transaction_id" placeholder="Enter Transaction ID" value="{{ transaction_id }}">
+                
+                <select name="transaction_type">
+                    <option value="">Select Transaction Type</option>
+                    <option value="Deposit" {% if transaction_type == 'Deposit' %}selected{% endif %}>Deposit</option>
+                    <option value="Withdrawal" {% if transaction_type == 'Withdrawal' %}selected{% endif %}>Withdrawal</option>
+                    <option value="Loan Repayment" {% if transaction_type == 'Loan Repayment' %}selected{% endif %}>Loan Repayment</option>
+                </select>
+
+                <input type="date" name="start_date" value="{{ start_date }}">
+                <input type="date" name="end_date" value="{{ end_date }}">
+
+                <select name="payment_method">
+                    <option value="">Select Payment Method</option>
+                    <option value="M-Pesa" {% if payment_method == 'M-Pesa' %}selected{% endif %}>M-Pesa</option>
+                    <option value="Bank Transfer" {% if payment_method == 'Bank Transfer' %}selected{% endif %}>Bank Transfer</option>
+                    <option value="Cash" {% if payment_method == 'Cash' %}selected{% endif %}>Cash</option>
+                </select>
+
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        {% if transactions %}
+            <table>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Member</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Payment Method</th>
+                </tr>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.transaction_id }}</td>
+                    <td>{{ transaction.member.username }}</td>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.payment_method }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No transactions found.</p>
+        {% endif %}
+
+        <a href="{% url 'adminpanel' %}" class="dashboard-btn">Return to Dashboard</a>
+    </div>
+</body>
+</html>

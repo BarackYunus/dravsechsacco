@@ -1,0 +1,928 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - SACCO</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            padding: 15px 20px;
+            color: white;
+        }
+        .nav-btn {
+            background-color: white;
+            color: #007bff;
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .nav-btn:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .panel {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .hidden-box {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            position: relative;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .feature-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+      .loan-container {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          gap: 10px;
+          padding: 20px;
+          background: #f9f9f9;
+          border-radius: 8px;
+          box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+          width: 100%;
+          max-width: 400px;
+          margin: auto;
+      }
+  
+      .loan-container label {
+          font-weight: bold;
+          align-self: center;
+      }
+  
+      .loan-container input,
+      .loan-container select {
+          width: 100%;
+          padding: 8px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+      }
+  
+      .loan-buttons {
+          grid-column: span 2;
+          display: flex;
+          justify-content: space-between;
+          margin-top: 10px;
+      }
+  
+      .nav-btn {
+          padding: 8px 15px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          background-color: #007bff;
+          color: white;
+          font-weight: bold;
+      }
+  
+      .nav-btn:hover {
+          background-color: #0056b3;
+      }
+  
+      #loanMessage {
+          grid-column: span 2;
+          font-weight: bold;
+          margin-top: 10px;
+          text-align: center;
+      }
+  
+    </style>
+    <script>
+        function toggleBox(boxId) {
+            let allBoxes = document.querySelectorAll('.hidden-box');
+            allBoxes.forEach(box => {
+                if (box.id !== boxId) {
+                    box.style.display = 'none';
+                }
+            });
+            let box = document.getElementById(boxId);
+            box.style.display = (box.style.display === "block") ? "none" : "block";
+        }
+    </script>
+</head>
+
+
+<!-- start body -->
+<body>
+
+
+    
+
+    <!--header section-->
+  <header class="navbar">
+    <div>
+        <i class="fas fa-user" style="margin-right: 5px;"></i>
+        <span> <strong>{{ member_account.account_number }}</strong></span>
+        
+    </div>
+    
+    <div>
+        <i class="fas fa-user" style="margin-right: 5px;"></i>
+        <span>Balance: <strong>Ksh. {{ balance }}</strong></span>
+    </div>
+    
+</header>
+<!--end header section-->
+
+
+    <!--start navigation buttons-->
+      <div class="feature-buttons">
+        <button class="nav-btn" onclick="toggleBox('loanBox')">Loan Application</button>
+        <button class="nav-btn" onclick="toggleBox('sharesBox')"> Shares</button>
+        <button class="nav-btn" onclick="toggleBox('investmentBox')">Invest Money</button>
+        <button class="nav-btn" onclick="toggleBox('withdrawDepositBox')">Withdraw & Deposit</button>
+        <button class="nav-btn" onclick="toggleBox('insuranceBox')"> Insurance</button>
+        <button class="nav-btn" onclick="toggleBox('loanStatus')"> your loans</button>
+        <button class="nav-btn" onclick="toggleBox('payloanbox')"> pay loan</button>
+        <a href="{% url 'insurance_transactions' %}"><button type="button" class="nav-btn">transaction summary</button></div></a>
+    
+    <!--end nav buttons-->
+
+<!-- hidden boxes section -->
+
+<!--loan box start-->
+  <div id="loanBox" class="hidden-box">
+      <button class="close-btn" onclick="toggleBox('loanBox')">X</button>
+      <h3 style="text-align: center;">Loan Application</h3>
+      <p style="text-align: center;">Apply for a loan quickly.</p>
+  
+      <div class="loan-container">
+        <form action="{% url 'apply_loan' %}" method="POST">
+          <label for="amount">Enter Loan Amount:</label>
+          <input type="number" id="amount" name="amount" placeholder="Enter amount" min="1" required>
+  
+          <label for="loanType">Select Loan Type:</label>
+         
+              <option name="business" value="business">1.Business Loan</option>
+              <option name="business" value="personal">2.Personal Help Loan</option>
+              <option name="business" value="education">3.Education Loan</option>
+              <option name="business" value="health">4.Health Loan</option>
+              <option name="business" value="others">5.Others</option>
+              <input type="number" id="loan_type" name="loan_type" placeholder="Enter loan_type" min="1" max="5" required>
+              {% for message in messages %}
+              <p class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+                  {{ message }}
+              </p>
+          {% endfor %}
+          <div class="loan-buttons">
+              <button class="nav-btn" type="submit">Check Eligibility</button>
+          </div>
+  
+         
+        </form>
+      </div>
+  </div>
+  
+<!--loan box end-->
+
+<style>
+    .hidden {
+        display: none;
+    }
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: none; /* Ensure it is hidden initially */
+        align-items: center;
+        justify-content: center;
+    }
+    .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        width: 80%;
+        max-width: 600px;
+        position: relative;
+    }
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: red;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .submit-btn {
+        background-color: blue;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .submit-btn:hover {
+        background-color: darkblue;
+    }
+</style>
+
+<!-- Loan Status Panel -->
+<div id="loanStatus" class="overlay">
+    <div class="modal">
+        <button class="close-btn" onclick="toggleBox('loanStatus')">&times;</button>
+        
+        <!-- Approved Loans -->
+        <h3>Approved Loans</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Member</th>
+                    <th>Amount (Ksh)</th>
+                    <th>Interest Rate (%)</th>
+                    <th>Start Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in approved_loans %}
+                <tr>
+                    <td>{{ loan.loan_id }}</td>
+                    <td>{{ loan.member.first_name }} {{ loan.member.last_name }}</td>
+                    <td>{{ loan.amount }}</td>
+                    <td>{{ loan.interest_rate }}</td>
+                    <td>{{ loan.start_date }}</td>
+                    <td>{{ loan.due_date }}</td>
+                    <td>{{ loan.status }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center;">No approved loans</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Loan Repayments -->
+        <h3>Loan Repayments</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Loan ID</th>
+                    <th>Amount Paid (Ksh)</th>
+                    <th>Payment Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for repayment in loan_repayments %}
+                <tr>
+                    <td>{{ repayment.loan.loan_id }}</td>
+                    <td>{{ repayment.amount_paid }}</td>
+                    <td>{{ repayment.payment_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center;">No repayments made</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Make Loan Payment Section -->
+<div id="payloanbox" class="overlay">
+    <div class="modal">
+        <button class="close-btn" onclick="toggleBox('payloanbox')">&times;</button>
+        <h3>Make a Loan Repayment</h3>
+        <form action="{% url 'make_repayment' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="repayment_amount">Amount:</label>
+                <input type="number" id="repayment_amount" name="loanAmount" placeholder="Enter Amount">
+            </div>
+            <button type="submit" class="submit-btn">Submit Repayment</button>
+        </form>
+        {% for message in messages %}
+        <p class="mt-4 {% if message.tags == 'success' %}text-green-600{% else %}text-red-600{% endif %}">
+            {{ message }}
+        </p>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+ <!--make loan payment section-->
+ <div id="payloanbox" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('payloanbox')">X</button>
+    <h3>Make a Loan Repayment</h3>
+    <form action="{% url 'make_repayment' %}" method="POST">
+        {% csrf_token %}
+  <label for="repayment_amount">Amount:</label>
+  <input type="number" id="repayment_amount" name="loanAmount" placeholder="Enter Amount">
+  <br>
+  <br>
+  <button type="submit">Submit Repayment</button>
+</form>
+{% for message in messages %}
+<p class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+    {{ message }}
+</p>
+{% endfor %}
+
+  </div>
+  <!--make loan payments end-->
+
+  <!-- Shares Box -->
+<div id="sharesBox" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('sharesBox')">X</button>
+    <h3><strong>Shares</strong></h3>
+    <p><strong>Your Shares:</strong> {{totalshares|default:0 }}</p>
+    <button class="nav-btn" onclick="toggleBox('buyshares')">Buy Shares</button>
+    <button class="nav-btn" onclick="toggleBox('sellshares')">Sell Shares</button>
+    
+    <!-- Message Box -->
+    {% if messages %}
+    <div id="shareMessages" class="message-box">
+        {% for message in messages %}
+            <p class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+                {{ message }}
+            </p>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- Buy Shares Box -->
+<div id="buyshares" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('buyshares')">X</button>
+    <form method="POST" action="{% url 'manage_shares' %}" onsubmit="return validateBuy()">
+        {% csrf_token %}
+        <p><strong>Buy Shares</strong></p>
+        <p><strong>Enter No. of Shares</strong></p>
+        <input type="number" id="buy_quantity" name="quantity" placeholder="No of shares" min="1" required>
+        <input type="hidden" name="action" value="buy">
+        <p id="buyMessage" class="message-box"></p>
+        <button type="submit" class="nav-btn">BUY</button>
+    </form>
+</div>
+
+<!-- Sell Shares Box -->
+<div id="sellshares" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('sellshares')">X</button>
+    <form method="POST" action="{% url 'manage_shares' %}" onsubmit="return validateSell()">
+        {% csrf_token %}
+        <p><strong>Sell Shares</strong></p>
+        <p><strong>Enter No. of Shares</strong></p>
+        <input type="number" id="sell_quantity" name="quantity2" placeholder="No of shares" min="1" required>
+        <button type="submit" class="nav-btn">SELL</button>
+    </form>
+</div>
+
+<script>
+    function toggleBox(boxId) {
+        var box = document.getElementById(boxId);
+        box.style.display = (box.style.display === "none" || box.style.display === "") ? "block" : "none";
+    }
+
+    function validateBuy() {
+        var quantity = parseInt(document.getElementById("buy_quantity").value);
+        var messageBox = document.getElementById("buyMessage");
+
+        if (quantity <= 0 || isNaN(quantity)) {
+            messageBox.innerHTML = "❌ Enter a valid number of shares to buy.";
+            messageBox.classList.add("error-message");
+            return false;
+        }
+        return true;
+    }
+
+    
+</script>
+
+<style>
+    .message-box {
+        margin-top: 10px;
+        font-weight: bold;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .success-message {
+        color: green;
+    }
+
+    .error-message {
+        color: red;
+    }
+</style>
+
+
+
+<!--investment box start-->
+  <div id="investmentBox" class="hidden-box">
+      <button class="close-btn" onclick="toggleBox('investmentBox')">X</button>
+      <h3>Investment Portfolio</h3>
+     <button type="button" class="nav-btn" onclick="toggleBox('invest')">Invest now</button>
+  </div>
+
+  <div id="invest" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('invest')">X</button>
+    
+    <div class="container">
+        <h1>Investment Opportunities</h1>
+    
+        {% for investment in investments %}
+            <div class="investment-card">
+                <div class="investment-info">
+                    <h2>{{ investment.name }}</h2>
+                    <p>{{ investment.description }}</p>
+                </div>
+                <div class="investment-price">
+                    <p>${{ investment.price }}</p>
+                </div>
+                <form action="{% url 'buy_investment' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="investment_id" value="{{ investment.id }}">
+                    <button type="submit" class="btn-buy">Buy</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+    
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .investment-card {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.3s;
+    }
+
+    .investment-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .investment-info {
+        flex: 1;
+    }
+
+    .investment-info h2 {
+        margin: 0;
+        font-size: 1.5em;
+        color: #333;
+    }
+
+    .investment-info p {
+        font-size: 1em;
+        color: #555;
+        margin-top: 5px;
+    }
+
+    .investment-price {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #4CAF50;
+    }
+
+    .btn-buy {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-buy:hover {
+        background-color: #45a049;
+    }
+</style>
+
+
+</div>
+  
+  <!--end investement box-->
+
+
+  <!--withdrawal and deposits-->
+
+  <div id="withdrawDepositBox" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('withdrawDepositBox')">X</button>
+    <h3>Withdraw & Deposit</h3>
+    <button  type="button" class="nav-btn" onclick="toggleBox('withdraw')">Withdraw</button>
+    <button type="button" class="nav-btn" onclick="toggleBox('deposit')">Deposit </button>
+</div>
+
+  <!--start deposit box-->
+  <div id="deposit" class="hidden-box">
+    <button class="close-btn" onclick="toggleBox('deposit')">X</button>
+    <form action="{% url 'dw' %}" method="POST">
+        {% csrf_token %}
+        <p><strong>Deposit:</strong></p>
+        <br>
+        <p><strong>enter Deposit Amount</strong></p>
+        <input type="number" placeholder="Amount" name="amount">
+        <p><strong>Deposit: </strong></p>
+        <button type="submit" class="nav-btn">Deposit</button>
+    </form>
+</div>
+<!--end deposit box-->
+
+<!--start withdraw box-->
+<div id="withdraw" class="hidden-box" >
+    <button class="close-btn" onclick="toggleBox('withdraw')">X</button>
+    <form action="{% url 'dw' %}" method="POST">
+        {% csrf_token %}
+        <p><strong>Withdraw:</strong></p>
+        <br>
+        <p><strong>enter Withdrawal Amount</strong></p>
+        <input type="number" placeholder="amount" name="amount2">
+        <p><strong>enter Phone number</strong></p>
+        <input type="number" placeholder="phone number" name="phone">
+        <button type="submit" class="nav-btn">Withdraw</button>
+    </form>
+</div>
+<!--end withdraw box-->
+<!--end withdrawal and deposit box-->
+
+
+<!--start insurance box-->
+  <div id="insuranceBox" class="hidden-box">
+      <button class="close-btn" onclick="toggleBox('insuranceBox')">X</button>
+      <h3>Start Insurance</h3>
+      <p>Join a SACCO insurance plan.</p>
+      <button type="button" class="nav-btn" onclick="toggleBox('insurance')">JOIN </button>
+      <a href="{% url 'insurance_details' %}"><button type="button" class="nav-btn">insurance details</button></a>
+      </div>
+
+      <!--insurance box-->
+      <div id="insurance" class="hidden-box">
+        <button class="close-btn" onclick="toggleBox('withdraw')">X</button>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .product-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-info h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .product-price {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .btn-buy {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-buy:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Insurance Options</h1>
+
+    {% for product in products %}
+        <div class="product-card">
+            <div class="product-info">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+            </div>
+            <div class="product-price">
+                <p>${{ product.price }}</p>
+            </div>
+            <form action="{% url 'purchase_insurance' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <button type="submit" class="btn-buy">Buy Insurance</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+  </div>
+<!--end insurance box-->
+
+<!--start transaction box-->
+  <div id="transactionBox" class="hidden-box">
+      <button class="close-btn" onclick="toggleBox('transactionBox')">X</button>
+      <h2>Transaction History</h2>
+
+    <h3>Deposits</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Amount (Ksh)</th>
+                <th>Date</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for deposit in deposits %}
+            <tr>
+                <td>{{ deposit.transaction_id }}</td>
+                <td>{{ deposit.amount }}</td>
+                <td>{{ deposit.date }}</td>
+                <td>{{ deposit.description }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No deposits found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Withdrawals</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Transaction ID</th>
+                <th>Amount (Ksh)</th>
+                <th>Date</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for withdrawal in withdrawals %}
+            <tr>
+                <td>{{ withdrawal.transaction_id }}</td>
+                <td>{{ withdrawal.amount }}</td>
+                <td>{{ withdrawal.date }}</td>
+                <td>{{ withdrawal.description }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No withdrawals found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+  <!--end transaction box-->
+
+  <!--start claim divident section-->
+  <div id="claimDividendsBox" class="hidden-box">
+      <button class="close-btn" onclick="toggleBox('claimDividendsBox')">X</button>
+      <h3>Claim Dividends</h3>
+        <a href="{% url 'claimdividents' %}" class="nav-btn">update</a>
+      <p>your last  dividents were updated successfully</p>
+      <p><strong>standing at:</strong>{{dividents}}</p>
+  </div>
+  <!--end claim divident section-->
+
+  <!--erro display panel-->
+  <div>
+  <div class="alert-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <a href="{% url 'userpanel' %}"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">x</button></a>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+<script>
+    $(document).ready(function(){
+        $(".alert").fadeIn();
+        setTimeout(function(){
+            $(".alert").fadeOut("slow");
+        }, 3000);
+    });
+</script>
+</div>
+<style>
+    .alert-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        width: 300px;
+        z-index: 1050;
+    }
+
+    .alert {
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    .alert-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+</style>
+
+
+
+
+  <!--detailed body start-->
+    <div class="dashboard-container">
+        <!-- Member Details Panel -->
+        <div class="panel">
+            
+            <h3>Member Details</h3>
+            <p><strong>Account No:</strong> {{ member_account.account_number }}</p>
+            <p><strong>Name:</strong> {{ member_account.member.first_name }} {{ member_account.member.last_name }}</p>
+            <p><strong>Email:</strong> {{ member_account.member.email }}</p>
+            <p><strong>ID No:</strong> {{ member_account.member.national_id }}</p>
+        </div>
+        <!--member details section-->
+        
+        <!-- Financial Summary Panel -->
+        <div class="panel">
+            <h3>Financial Summary</h3>
+            <p><strong>Shares:</strong> {{ totalshares }} </p>
+            <p><strong>Dividends:</strong> Ksh. {{ dividents }}</p>
+            <p><strong>Investments:</strong>  Ksh.  {{ investmentvalue }}</p>
+            <p><strong>Savings:</strong> Ksh. {{ savings }}</p>
+            <button class="nav-btn" onclick="toggleBox('claimDividendsBox')">Claim Dividends</button>
+            <button class="nav-btn" onclick="toggleBox('transactionBox')">Transaction History</button>
+        </div>
+        <!--financial summarry panel-->
+
+       
+
+          
+        
+
+      
+    </div>
+</body>
+
+
+</html>
+

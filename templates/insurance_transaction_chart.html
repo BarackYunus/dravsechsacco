@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Transactions</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            background: white;
+            padding: 20px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .summary {
+            text-align: left;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .charts-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .chart-box {
+            flex: 1;
+            padding: 10px;
+        }
+        .summary h3 {
+            margin-bottom: 10px;
+            color: #1976d2;
+        }
+        .summary p {
+            font-size: 16px;
+            margin: 5px 0;
+            padding: 10px;
+            border-left: 5px solid;
+            border-radius: 5px;
+        }
+        .good { color: green; border-color: green; background: #e8f5e9; }
+        .warning { color: orange; border-color: orange; background: #fff3e0; }
+        .danger { color: red; border-color: red; background: #ffebee; }
+        canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div style="text-align: center;">
+        <a href="{% url 'userpanel' %}"><button type="button" class="nav-btn">Return Home</button></a>
+    </div>
+
+    <div class="container">
+        <!-- Summary section -->
+        <div class="summary">
+            <h3>Transaction Summary for {{ member.username }}</h3>
+            <p><strong>Deposits:</strong> Ksh <span id="depositAmount">0</span></p>
+            <p><strong>Withdrawals:</strong> Ksh <span id="withdrawAmount">0</span></p>
+            <p><strong>Insurance Payments:</strong> Ksh <span id="insuranceAmount">0</span></p>
+            <p id="summaryText" class=""></p>
+        </div>
+
+        <!-- Charts section -->
+        <div class="charts-container">
+            <div class="chart-box">
+                <canvas id="transactionBarChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <canvas id="transactionPieChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var transactionData = {{ transaction_data|safe }};  // Data from Django
+
+            var labels = transactionData.map(t => t.transaction_type);
+            var amounts = transactionData.map(t => t.amount);
+
+            var totalDeposits = amounts[labels.indexOf("Deposit")] || 0;
+            var totalWithdrawals = amounts[labels.indexOf("Withdraw")] || 0;
+            var totalInsurance = amounts[labels.indexOf("Insurance Payment")] || 0;
+
+            // Update UI with real values
+            document.getElementById("depositAmount").textContent = totalDeposits.toLocaleString();
+            document.getElementById("withdrawAmount").textContent = totalWithdrawals.toLocaleString();
+            document.getElementById("insuranceAmount").textContent = totalInsurance.toLocaleString();
+
+            // Generate summary advice
+            var summaryElement = document.getElementById("summaryText");
+            if (totalDeposits > totalWithdrawals) {
+                summaryElement.textContent = "Great job! You're saving more than you withdraw. Keep it up! 🎉";
+                summaryElement.className = "good";
+            } else if (totalDeposits === totalWithdrawals) {
+                summaryElement.textContent = "Your deposits and withdrawals are equal. Consider saving more.";
+                summaryElement.className = "warning";
+            } else {
+                summaryElement.textContent = "Warning: You are withdrawing more than you deposit. Try to increase your savings!";
+                summaryElement.className = "danger";
+            }
+
+            // Bar Chart
+            var barCtx = document.getElementById("transactionBarChart").getContext("2d");
+            new Chart(barCtx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Amount (Ksh)",
+                        data: amounts,
+                        backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)", "rgba(75, 192, 192, 0.6)"],
+                        borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Pie Chart
+            var pieCtx = document.getElementById("transactionPieChart").getContext("2d");
+            new Chart(pieCtx, {
+                type: "pie",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: amounts,
+                        backgroundColor: ["rgba(54, 162, 235, 0.6)", "rgba(255, 99, 132, 0.6)", "rgba(75, 192, 192, 0.6)"],
+                        borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        });
+    </script>
+</body>
+</html>

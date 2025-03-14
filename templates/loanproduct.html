@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Products - Dravsech SACCO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .header {
+            background: #004085;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            position: relative;
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            background: #ffc107;
+            color: #333;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .loan-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3 {
+            color: #004085;
+        }
+        .apply-button {
+            display: block;
+            width: max-content;
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .loan-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .loan-list ul li {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'home' %}" class="home-button">⬅ Home</a>
+        Dravsech SACCO Loan Products
+    </header>
+
+    <div class="container">
+        <section class="loan-section">
+            <h2>Our Loan Products</h2>
+            <p>We offer various loan products tailored to meet different financial needs.</p>
+        </section>
+
+        <section class="loan-section">
+            <h3>Personal Loans</h3>
+            <ul>
+                <li><strong>Emergency Loan:</strong> 5% interest, quick approval.</li>
+                <li><strong>Medical Loan:</strong> 6% interest, covers medical expenses.</li>
+                <li><strong>Household Loan:</strong> 7% interest, for home improvements.</li>
+            </ul>
+        </section>
+
+        <section class="loan-section">
+            <h3>Business Loans</h3>
+            <ul>
+                <li><strong>Restocking Loan:</strong> 8% interest, for small businesses.</li>
+                <li><strong>Agricultural Loan:</strong> 7% interest, for farming and livestock.</li>
+                <li><strong>Startup Loan:</strong> 9% interest, for new business ventures.</li>
+            </ul>
+        </section>
+
+        <section class="loan-section">
+            <h3>Education Loans</h3>
+            <ul>
+                <li><strong>School Fees Loan:</strong> 6% interest, for primary & secondary fees.</li>
+                <li><strong>Higher Education Loan:</strong> 5% interest, for university & college.</li>
+            </ul>
+        </section>
+
+        <section class="loan-section">
+            <h3>Development Loans</h3>
+            <ul>
+                <li><strong>Housing Loan:</strong> 10% interest, for property purchase.</li>
+                <li><strong>Asset Financing Loan:</strong> 8% interest, for equipment & vehicles.</li>
+            </ul>
+        </section>
+
+        <section class="loan-section">
+            <h3>How to Apply</h3>
+            <p>Ensure you are a SACCO member and submit your application online.</p>
+            <a href="{% url 'auth_view' %}" class="apply-button">Apply Now</a>
+        </section>
+    </div>
+</body>
+</html>

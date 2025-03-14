@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Reports</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .no-data {
+            text-align: center;
+            font-weight: bold;
+            color: #888;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'adminpanel' %}">return to admin panel</a>
+    <div class="container">
+        <h2>Active Insurance Policies Report</h2>
+        <table>
+            <tr>
+                <th>Account Number</th>
+                <th>Product</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+            {% for insurance in active_insurance %}
+            <tr>
+                <td>{{ insurance.account_number }}</td>
+                <td>{{ insurance.product.name }}</td>
+                <td>{{ insurance.start_date }}</td>
+                <td>{{ insurance.end_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="no-data">None</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Expired Insurance Policies Report</h2>
+        <table>
+            <tr>
+                <th>Account Number</th>
+                <th>Product</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+            {% for insurance in expired_insurance %}
+            <tr>
+                <td>{{ insurance.account_number }}</td>
+                <td>{{ insurance.product.name }}</td>
+                <td>{{ insurance.start_date }}</td>
+                <td>{{ insurance.end_date }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="no-data">None</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Insurance Claims Report</h2>
+        <table>
+            <tr>
+                <th>Claim ID</th>
+                <th>Account Number</th>
+                <th>Product</th>
+                <th>Claim Amount</th>
+                <th>Date Filed</th>
+            </tr>
+            {% for claim in insurance_claims %}
+            <tr>
+                <td>{{ claim.id }}</td>
+                <td>{{ claim.insurance.account_number }}</td>
+                <td>{{ claim.insurance.product.name }}</td>
+                <td>{{ claim.claim_amount }}</td>
+                <td>{{ claim.date_filed }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="no-data">None</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

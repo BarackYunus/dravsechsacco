@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Details</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .member-info {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .member-info p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'adminpanel' %}" class="button">Return to Dashboard</a>
+
+    <div class="container">
+        <h2>Member Saving Details</h2>
+        
+        {% for member in members %}
+        <div class="member-info">
+            <p><strong>Account Number:</strong> {{ member.account_number }}</p>
+            <p><strong>Savings Amount:</strong> {{ member.savings_amount }}</p>
+            <p><strong>Dividend Value:</strong> {{ member.dividend_value }}</p>
+            <p><strong>Shares Value:</strong> {{ member.shares_value }}</p>
+            <p><strong>Investment Value:</strong> {{ member.investment_value }}</p>
+            <p><strong>Loans Available:</strong> {{ member.loans_available }}</p>
+            <p><strong>Total Balance:</strong> {{ member.total_balance }}</p>
+        </div>
+        {% endfor %}
+
+        <canvas id="savingsChart"></canvas>
+
+        <div class="button-container">
+            <a href="{% url 'download_pdf' %}" class="button">Download PDF</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var ctx = document.getElementById('savingsChart').getContext('2d');
+
+            var membersData = [
+                {% for member in members %}
+                {
+                    name: "Member {{ forloop.counter }}",
+                    savings: {{ member.savings_amount }},
+                    shares: {{ member.shares_value }},
+                    investment: {{ member.investment_value }}
+                },
+                {% endfor %}
+            ];
+
+            var labels = membersData.map(m => m.name);
+            var savings = membersData.map(m => m.savings);
+            var shares = membersData.map(m => m.shares);
+            var investments = membersData.map(m => m.investment);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Savings',
+                            data: savings,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        },
+                        {
+                            label: 'Shares',
+                            data: shares,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        },
+                        {
+                            label: 'Investment',
+                            data: investments,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

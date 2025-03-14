@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Query</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+        }
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .dashboard-btn {
+            display: block;
+            width: fit-content;
+            margin: 10px auto;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .dashboard-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'adminpanel' %}" class="dashboard-btn">Return to Dashboard</a>
+
+    <div class="container">
+        <h2>Savings Query</h2>
+        
+        <form method="GET" action="">
+            <div class="search-box">
+                <input type="text" name="account_number" placeholder="Enter Account Number..." value="{{ account_number }}">
+                <input type="number" name="min_balance" placeholder="Min Balance" value="{{ min_balance }}">
+                <input type="number" name="max_balance" placeholder="Max Balance" value="{{ max_balance }}">
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        {% if savings %}
+            <table>
+                <tr>
+                    <th>Account Number</th>
+                    <th>Member</th>
+                    <th>Balance (Ksh)</th>
+                    <th>Deposit Date</th>
+                </tr>
+                {% for saving in savings %}
+                <tr>
+                    <td>{{ saving.account_number }}</td>
+                    <td>{{ saving.member.first_name }} {{ saving.member.last_name }}</td>
+                    <td>{{ saving.amount }}</td>
+                    <td>{{ saving.deposit_date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No savings records found matching your criteria.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

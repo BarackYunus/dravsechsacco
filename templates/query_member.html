@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Query</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+            width: 50%;
+            text-align: center;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        .dashboard-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .dashboard-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Search for a Member</h2>
+        <form method="GET">
+            <input type="text" name="search" placeholder="Enter Name, Email, or Phone" value="{{ search_term }}">
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="results">
+            {% if query_results %}
+                <h3>Search Results:</h3>
+                <ul>
+                    {% for member in query_results %}
+                        <li>{{ member.first_name }} {{ member.last_name }} - {{ member.email }} ({{ member.phone }})</li>
+                    {% endfor %}
+                </ul>
+            {% elif search_term %}
+                <p>No results found for "{{ search_term }}".</p>
+            {% endif %}
+        </div>
+
+        <a href="{% url 'adminpanel' %}" class="dashboard-btn">Return to Dashboard</a>
+    </div>
+</body>
+</html>
